@@ -1,0 +1,354 @@
+/* 整体页面 */
+page,
+.page {
+  background-color: #f5f6f8;
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+/* 规则集卡片 */
+.ruleset-card {
+  margin-bottom: 24rpx;
+  border-radius: 16rpx;
+  background-color: #ffffff;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+/* 规则集头部 */
+.ruleset-header {
+  padding: 24rpx 28rpx;
+  background-color: #f7f8fa;
+  border-bottom: 1px solid #eef0f3;
+}
+
+.ruleset-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1f2d3d;
+}
+
+.ruleset-desc {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #8a8f99;
+  display: block;
+}
+
+/* 规则集内容区域 */
+.ruleset-body {
+  padding: 20rpx 24rpx 24rpx;
+}
+
+/* 规则单选区域 */
+.rule-radio-group {
+  display: flex;
+  flex-direction: column; /* 倒成一列 */
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.rule-radio-item {
+  margin-right: 32rpx;
+  margin-bottom: 12rpx;
+  display: inline-flex;
+  align-items: center;
+}
+
+.rule-radio-item radio {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 6rpx 0;
+  transform: scale(0.8);
+}
+
+/* 单条规则卡片（选中后才展示） */
+.rule-card {
+  margin-top: 12rpx;
+  padding: 20rpx 18rpx;
+  border-radius: 12rpx;
+  border: 1px solid #eef0f3;
+  background-color: #ffffff;
+}
+
+.rule-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.rule-desc {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #8a8f99;
+}
+
+/* 每个元数据字段区域 */
+.field {
+  margin-top: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* label（propertyName） */
+.label {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-right: 15rpx;
+}
+
+/* 输入+单位包一层，便于对齐 */
+.field-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 通用输入框样式 */
+.input {
+  width: 100%;
+  padding: 0 22rpx;
+  border-radius: 12rpx;
+  border: 1px solid #dcdfe6;
+  font-size: 28rpx;
+  box-sizing: border-box;
+  background-color: #fff;
+  height: 60rpx;
+  text-align: center;
+  line-height: 28rpx;
+  width: 80%;
+}
+
+/* 单位文本：min / day / 次 等 */
+.unit {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 单选项（元数据内部的 radio） */
+.radio-item {
+  margin-top: 10rpx;
+  margin-right: 32rpx;
+  display: inline-flex;
+  align-items: center;
+}
+
+.radio-item radio {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 6rpx 0;
+  transform: scale(0.75);
+}
+
+.radio-item text {
+  font-size: 26rpx;
+  color: #34495e;
+}
+
+/* 多选项（checkbox） */
+.checkbox-item {
+  margin-top: 10rpx;
+  margin-right: 32rpx;
+  display: inline-flex;
+  align-items: center;
+}
+
+.checkbox-item checkbox {
+  margin-right: 8rpx;
+}
+
+.checkbox-item text {
+  font-size: 26rpx;
+  color: #34495e;
+}
+
+/* 底部提交按钮 */
+.btn {
+  margin-top: 24rpx;
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  border-radius: 12rpx;
+  background-color: #295575;
+  color: #ffffff;
+  font-size: 30rpx;
+}
+
+/* 按压态 */
+.btn:active {
+  opacity: 0.85;
+}
+
+
+/* 规则单选区域整体布局已有 rule-radio-group/rule-radio-item，这里补 tooltip 部分 */
+
+/* 文本与 icon 一行展示 */
+.rule-radio-text-group {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 单选文字 */
+.rule-radio-text {
+  font-size: 26rpx;
+  color: #333;
+}
+
+/* icon 容器：相对定位，给 tooltip 做锚点 */
+.rule-desc-wrapper {
+  margin-left: 12rpx;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* 小圆 i 图标 */
+.rule-desc-icon {
+  width: 25rpx;
+  height: 25rpx;
+  border-radius: 50%;
+  border: 1px solid #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: #666;
+  background-color: #f7f7f7;
+}
+
+.rule-desc-icon:active {
+  background-color: #e1e1e1;
+}
+
+/* tooltip 气泡本体：相对 icon 向上偏移 */
+.rule-desc-tooltip-pop {
+  position: absolute;
+  left: 50%;
+  bottom: 40rpx;       /* 气泡出现在 icon 上方 */
+  transform: translateX(-50%);
+  min-width: 500rpx;
+  padding: 16rpx 20rpx;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 12rpx;
+  z-index: 99;
+}
+
+/* tooltip 文本 */
+.rule-desc-tooltip-text {
+  font-size: 24rpx;
+  color: #ffffff;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+/* tooltip 小三角箭头 */
+.rule-desc-tooltip-arrow {
+  position: absolute;
+  left: 50%;
+  bottom: -12rpx;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-width: 6rpx;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
+}
+
+/* ============= 规则集角标 ============= */
+.ruleset-tag {
+  background: #295575;
+  color: white;
+  padding: 6rpx 16rpx;
+  font-size: 22rpx;
+  border-radius: 8rpx;
+  display: inline-block;
+  margin-right: 15rpx;
+}
+
+/* ============= 规则角标 ============= */
+.rule-tag {
+  background: #42b983;
+  color: white;
+  padding: 4rpx 12rpx;
+  font-size: 20rpx;
+  border-radius: 6rpx;
+  margin-left: 12rpx;
+  margin-right: 15rpx;
+}
+
+/* 必填红星 */
+.required-star {
+  color: #ff4d4f;
+  font-size: 32rpx;
+  margin-left: 8rpx;
+  margin-top: 2rpx;
+  margin-right: 15rpx;
+}
+
+/* 元数据描述 icon 容器：相对定位给 tooltip 当锚点 */
+.meta-desc-wrapper {
+  margin-left: 12rpx;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* 小圆 i 图标 */
+.meta-desc-icon {
+  width: 28rpx;
+  height: 28rpx;
+  border-radius: 50%;
+  border: 1px solid #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20rpx;
+  color: #666;
+  background-color: #f7f7f7;
+}
+
+.meta-desc-icon:active {
+  background-color: #e1e1e1;
+}
+
+/* 元数据 tooltip 气泡，在 icon 上方 */
+.meta-desc-tooltip-pop {
+  position: absolute;
+  left: 50%;
+  bottom: 40rpx;            /* 出现在 icon 上方 */
+  transform: translateX(-50%);
+  max-width: 680rpx;        /* 比较舒适的宽度 */
+  min-width: 420rpx;
+  padding: 16rpx 22rpx;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 12rpx;
+  z-index: 99;
+  box-sizing: border-box;
+}
+
+.meta-desc-tooltip-text {
+  font-size: 24rpx;
+  color: #ffffff;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+/* 小三角箭头 */
+.meta-desc-tooltip-arrow {
+  position: absolute;
+  left: 50%;
+  bottom: -12rpx;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-width: 6rpx;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
+}

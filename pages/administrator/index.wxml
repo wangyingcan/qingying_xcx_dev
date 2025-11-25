@@ -1,0 +1,104 @@
+<view class="page">
+  <!-- 规则集列表 -->
+  <block wx:for="{{ruleSets}}" wx:key="ruleSetId" wx:for-item="ruleSet">
+    <view class="ruleset-card">
+      <view class="ruleset-header" bindtap="onToggleRuleSet" data-id="{{ruleSet.ruleSetId}}">
+        <view style="display: flex;align-items: center;">
+          <text wx:if="{{ruleSet.required == '1'}}" class="required-star">*</text>
+          <text class="ruleset-tag">规则集</text>
+          <text class="ruleset-title">{{ruleSet.ruleSetName}}</text>
+        </view>
+        <text class="ruleset-desc">{{ruleSet.description}}</text>
+      </view>
+
+      <!-- 展开区域 -->
+      <view class="ruleset-body" wx:if="{{activeRuleSetId == ruleSet.ruleSetId}}">
+        <!-- ① 规则单选：一个规则集下只能选中一条规则 -->
+        <radio-group class="rule-radio-group" data-rsid="{{ruleSet.ruleSetId}}" bindchange="onRuleChange">
+          <block wx:for="{{ruleSet.ruleList}}" wx:key="ruleId" wx:for-item="rule">
+            <label class="rule-radio-item">
+              <radio value="{{rule.ruleId}}" checked="{{ruleSet.selectedRuleId == rule.ruleId}}" />
+              <text class="rule-tag">规则</text>
+              <text style="margin-right: 20rpx;">{{rule.ruleName}}</text>
+              <!-- 描述 icon + tooltip -->
+              <view wx:if="{{rule.ruleDesc}}" class="rule-desc-wrapper" data-rsid="{{ruleSet.ruleSetId}}" data-rid="{{rule.ruleId}}" data-desc="{{rule.ruleDesc}}" bindtap="onRuleDescTap">
+                <view class="rule-desc-icon">i</view>
+
+                <!-- 只在当前这条规则被点中时展示 tooltip -->
+                <view wx:if="{{tooltipRuleSetId == ruleSet.ruleSetId && tooltipRuleId == rule.ruleId}}" class="rule-desc-tooltip-pop">
+                  <text class="rule-desc-tooltip-text">{{rule.ruleDesc}}</text>
+                  <view class="rule-desc-tooltip-arrow"></view>
+                </view>
+              </view>
+            </label>
+          </block>
+        </radio-group>
+
+        <!-- ② 只渲染“被选中的规则”的元数据表单 -->
+        <block wx:for="{{ruleSet.ruleList}}" wx:key="ruleId" wx:for-item="rule">
+          <view class="rule-card" wx:if="{{ruleSet.selectedRuleId == rule.ruleId}}">
+            <!-- 元数据列表：propertyName 作为 label -->
+            <block wx:for="{{rule.metapropertyEntityList}}" wx:key="propertyCode" wx:for-item="meta">
+              <view class="field">
+                <view style="display: flex;align-items: center;margin-bottom: 15rpx;">
+                  <text class="label">{{meta.propertyName}}</text>
+                  <view
+                    wx:if="{{meta.propertyDesc}}"
+                    class="meta-desc-wrapper"
+                    data-rsid="{{ruleSet.ruleSetId}}"
+                    data-rid="{{rule.ruleId}}"
+                    data-code="{{meta.propertyCode}}"
+                    data-desc="{{meta.propertyDesc}}"
+                    bindtap="onMetaDescTap"
+                  >
+                    <view class="meta-desc-icon">i</view>
+
+                    <!-- 当前这一条 meta 被点中时显示 tooltip -->
+                    <view
+                      wx:if="{{tooltipMetaRuleSetId == ruleSet.ruleSetId && tooltipMetaRuleId == rule.ruleId && tooltipMetaCode == meta.propertyCode}}"
+                      class="meta-desc-tooltip-pop"
+                    >
+                      <text class="meta-desc-tooltip-text">{{meta.propertyDesc}}</text>
+                      <view class="meta-desc-tooltip-arrow"></view>
+                    </view>
+                  </view>
+                </view>
+
+                <!-- BOOL -> switch -->
+                <switch wx:if="{{meta.propertyType == 'BOOL'}}" checked="{{meta.value}}" data-rsid="{{ruleSet.ruleSetId}}" data-rid="{{rule.ruleId}}" data-code="{{meta.propertyCode}}" bindchange="onSwitchChange" />
+
+                <!-- 数字输入（INT/DECIMAL） -->
+                <view wx:elif="{{meta.propertyType == 'INT' || meta.propertyType == 'DECIMAL'}}" class="field-input-wrap">
+                  <input class="input" type="number" value="{{meta.value}}" placeholder="请输入 {{meta.propertyName}}" data-rsid="{{ruleSet.ruleSetId}}" data-rid="{{rule.ruleId}}" data-code="{{meta.propertyCode}}" data-min="{{meta.minimum}}" data-max="{{meta.maximum}}" bindinput="onNumberInput" />
+                  <text class="unit" wx:if="{{meta.unit}}">{{meta.unit}}</text>
+                </view>
+
+                <!-- 单选：SINGLE + (STATIC/SERVICE) -> radio-group -->
+                <radio-group wx:elif="{{meta.inputMode == 'SINGLE' && (meta.optionSourceType == 'STATIC' || meta.optionSourceType == 'SERVICE')}}" data-rsid="{{ruleSet.ruleSetId}}" data-rid="{{rule.ruleId}}" data-code="{{meta.propertyCode}}" bindchange="onRadioChange">
+                  <label wx:for="{{meta.options}}" wx:for-item="opt" wx:key="value" class="radio-item">
+                    <radio value="{{opt.value}}" checked="{{opt.value == meta.value}}" />
+                    <text>{{opt.label}}</text>
+                  </label>
+                </radio-group>
+
+                <!-- 多选：MULTIPLE + (STATIC/SERVICE) -> checkbox-group -->
+                <checkbox-group wx:elif="{{meta.inputMode == 'MULTIPLE' && (meta.optionSourceType == 'STATIC' || meta.optionSourceType == 'SERVICE')}}" data-rsid="{{ruleSet.ruleSetId}}" data-rid="{{rule.ruleId}}" data-code="{{meta.propertyCode}}" bindchange="onCheckboxChange">
+                  <label class="checkbox-item" wx:for="{{meta.options}}" wx:for-item="opt" wx:key="value">
+                    <checkbox value="{{opt.value}}" checked="{{opt.checked}}" />
+                    <text>{{opt.label}}</text>
+                  </label>
+                </checkbox-group>
+
+                <!-- 兜底：字符串自由输入 -->
+                <input wx:else class="input" type="text" value="{{meta.value}}" placeholder="请输入 {{meta.propertyName}}" data-rsid="{{ruleSet.ruleSetId}}" data-rid="{{rule.ruleId}}" data-code="{{meta.propertyCode}}" bindinput="onTextInput" />
+              </view>
+            </block>
+          </view>
+        </block>
+      </view>
+    </view>
+  </block>
+
+  <!-- ③ 提交：针对所有规则集，每个规则集只提交选中的那条规则 -->
+  <button class="btn" bindtap="onSubmit">提交全部规则集配置</button>
+</view>
